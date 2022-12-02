@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<None Update="Input\Day01.txt">
-	 <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	<None Update="Input\*.txt">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
   </ItemGroup>
 
