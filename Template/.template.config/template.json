@@ -1,0 +1,15 @@
+{
+ "$schema": "http://json.schemastore.org/template", 
+  "author": "Matt Sharpe",
+  "classifications": [ "C#", "Item" ],
+  "name": "AdventOfCodeDay",
+  "identity": "AdventOfCodeDay",
+  "shortName": "aoc", 
+  "sourceName": "DayX",
+  "tags": {
+    "language": "C#",
+    "sourceName": "DayX",
+    "preferNameDirectory": "true"
+  }
+}
+
