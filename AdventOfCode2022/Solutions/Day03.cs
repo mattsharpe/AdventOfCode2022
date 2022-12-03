@@ -5,33 +5,31 @@ namespace AdventOfCode2022.Solutions
     {
         public int Part1(string[] input)
         {
-            ParseInput(input);
             return input.Select(ProcessLine).Sum();
-            
         }
 
         public int Part2(string[] input)
         {
-            return 0;
+            var chunks = input.Chunk(3);
+            return chunks.Select(FindCommonItem).Sum();
         }
 
-        public void ParseInput(string[] input)
-        {
-            foreach(var line in input)
-            {
-                ProcessLine(line);
-            }
-        }
 
         private int ProcessLine(string line)
         {
-            var chunks = line.ToList().Chunk(line.Length / 2);
-            var thing = chunks.Select(x=> x.ToHashSet());
+            var chunks = line.Chunk(line.Length / 2);
+            return FindCommonItem(chunks);
+        }
 
-            var first = chunks.First().ToArray().ToHashSet();
-            var second = chunks.Last().ToArray().ToHashSet();
+        private int FindCommonItem(IEnumerable<IEnumerable<char>> chunks)
+        {
 
-            var item = first.Intersect(second).Single();
+            var first = chunks.First().ToHashSet();
+            foreach(var set in chunks)
+            {
+                first.IntersectWith(set);
+            }
+            var item = first.Single();
 
             //map the char codes to 1..26 for a-z and 27..52 for A-Z
             return item < 'a' ? item - 38 : item - 96;
