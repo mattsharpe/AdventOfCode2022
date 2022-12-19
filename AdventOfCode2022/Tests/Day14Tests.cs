@@ -30,19 +30,19 @@ namespace AdventOfCode2022.Tests
         [TestMethod]
         public void Part1()
         {
-            Assert.AreEqual(0, _day.Part1(_input));
+            Assert.AreEqual(672, _day.Part1(_input));
         }
 
         [TestMethod]
         public void Part2Sample()
         {
-            Assert.AreEqual(0, _day.Part2(_sample));
+            Assert.AreEqual(93, _day.Part2(_sample));
         }
 
         [TestMethod]
         public void Part2()
         {
-            Assert.AreEqual(0, _day.Part2(_input));
+            Assert.AreEqual(26831, _day.Part2(_input));
         }
     }
 }

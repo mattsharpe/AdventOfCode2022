@@ -8,14 +8,19 @@ namespace AdventOfCode2022.Solutions
         public int Part1(string[] input)
         {
             var map = ParseInput(input);
+            
+            AddSand(map);
 
-            Console.WriteLine(Print(map));
-            return 0;
+            return map.Values.Count(x=> x == 'o');
         }
 
         public int Part2(string[] input)
         {
-            return 0;
+            var map = ParseInput(input);
+            
+            AddSand(map, true);
+
+            return map.Values.Count(x => x == 'o');
         }
 
         private Dictionary<(int X, int Y), char> ParseInput(string[] input)
@@ -26,9 +31,9 @@ namespace AdventOfCode2022.Solutions
             {
                 var walls = line.Split(" -> ").Select(x =>
                 {
-                    var lineDefinition = x.Split(",").Select(int.Parse);
+                    var lineDefinition = x.Split(",").Select(int.Parse).ToArray();
                     return (X: lineDefinition.First(), Y: lineDefinition.Last());
-                });
+                }).ToArray();
 
                 var pairs = walls.Zip(walls.Skip(1));
 
@@ -51,33 +56,67 @@ namespace AdventOfCode2022.Solutions
             return map;
         }
 
-        private string Print(Dictionary<(int X, int Y), char> map)
+        void AddSand(Dictionary<(int X, int Y), char> map, bool part2 = false)
         {
-            var minX = map.Keys.Select(k => k.X).Min();
-            var maxX = map.Keys.Select(k => k.X).Max();
-            var minY = map.Keys.Select(k => k.Y).Min();
+            var sandSource = (500, 0);
             var maxY = map.Keys.Select(k => k.Y).Max();
 
-            var output = new StringBuilder();
-            for (var y = minY; y <= maxY; y++)
+            //This drops a grain of sand and models it until it lands somewhere
+            (int X, int Y) DropGrainOfSand((int X, int Y) location)
             {
-                var line = new StringBuilder();
-                for (var x = minX; x <= maxX; x++)
+                while (true)
                 {
-                    if (map.TryGetValue((x, y), out char value))
+                    var (x, y) = location;
+                    
+                    //if this falls off the bottom
+                    if (y > maxY)
                     {
-                        line.Append(value);
+                        //for part 2 let it hit the floor, otherwise it falls forever
+                        return part2 ? (x, y) : (x, int.MinValue);
+                    } 
+                    
+                    //if directly below is open
+                    if (!map.ContainsKey((x, y + 1)))
+                    {
+                        location.Y += 1;
+                    } 
+
+                    //if not down to the left
+                    else if (!map.ContainsKey((x - 1, y + 1)))
+                    {
+                        location.X -= 1;
+                        location.Y += 1;
+                    } 
+                    //if not down to the right
+                    else if (!map.ContainsKey((x + 1, y + 1)))
+                    {
+                        location.X += 1;
+                        location.Y += 1;
                     }
                     else
                     {
-                        line.Append('.');
+                        return (x, y);
                     }
+
                 }
-                output.AppendLine(line.ToString());
             }
+            //drops a grain of sand to see where it lands
+            var position = DropGrainOfSand(sandSource);
+            
+            //While it's still piling up, drop another
+            while (position.Y != int.MinValue)
+            {
+                //record in the map
+                map[position] = 'o';
 
-            return output.ToString();
+                if (position != sandSource)
+                {
+                    position = DropGrainOfSand(sandSource);
+                    continue;
+                }
+
+                break;
+            }
         }
-
     }
 }
