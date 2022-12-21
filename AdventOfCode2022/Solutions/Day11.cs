@@ -116,7 +116,7 @@ namespace AdventOfCode2022.Solutions
     {
         public int Id { get; set; }
         public Queue<long> Items { get; set; } = new();
-        public Func<long, long> Operation { get; set; }
+        public Func<long, long>? Operation { get; set; }
         public int DivisibleBy { get; set; }
         public int MonkeyIfTrue { get; set; }
         public int MonkeyIfFalse { get; set; }

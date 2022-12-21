@@ -77,7 +77,7 @@ namespace AdventOfCode2022.Solutions
 
     class Directory
     {
-        public string Path { get; set; }
+        public string Path { get; set; } = "";
         public List<Directory> Directories { get; set;  } = new();
         public List<(string name, int size)> Files { get; set; } = new();
 
