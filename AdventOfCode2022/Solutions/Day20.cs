@@ -53,9 +53,8 @@ namespace AdventOfCode2022.Solutions
             //find the first instance of value 0, then we we want 1000 / 2000 / 3000 after this
             var indexZero = mixed.FindIndex(e => e.Value == 0);
 
-            long ValueAtIndex(int start) => mixed[(start + indexZero) % mixed.Count].Value;
-
-            return ValueAtIndex(1000) + ValueAtIndex(2000) + ValueAtIndex(3000);
+            return new[] { 1000, 2000, 3000 }
+                .Sum(x => mixed[(x + indexZero) % mixed.Count].Value);
 
         }
     }
