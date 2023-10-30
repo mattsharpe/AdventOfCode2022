@@ -55,8 +55,6 @@ namespace AdventOfCode2022.Tests
         [TestMethod]
         public void Part2()
         {
-            //3221245824363
-            //3221245824364 - wrong
             Assert.AreEqual(3221245824363, _day.Part2(_input));
         }
     }

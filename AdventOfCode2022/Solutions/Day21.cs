@@ -34,11 +34,11 @@ namespace AdventOfCode2022.Solutions
             Console.WriteLine($"{targetNumber} {monkeys.Property(targetNumber)} == {myNumber} {monkeys.Property(myNumber)}");
 
             long low = 0;
-            long high = long.MaxValue; // Replace this with the highest possible value for 'current'
+            var high = long.MaxValue; // Replace this with the highest possible value for 'current'
 
             while(monkeys.Property(targetNumber) != monkeys.Property(myNumber))
             {
-                long mid = (low + high) / 2;
+                var mid = (low + high) / 2;
                 monkeys.humn = mid; 
 
                 if (monkeys.Property(targetNumber) < monkeys.Property(myNumber))
@@ -64,19 +64,9 @@ namespace AdventOfCode2022.Solutions
 
         private IEnumerable<string> ParseInput(string[] input)
         {
-            foreach(var line in input)
-            {
-                var split = line.Split(": ");
-
-                if (split[0] == "humn")
-                {
-                    yield return $"public long {split[0]} = {split[1]};";
-                } 
-                else
-                {
-                    yield return $"public long {split[0]} => {split[1]};";
-                }   
-            }
+            return input.Select(line => line.Split(": ")).Select(split => split[0] == "humn"
+                ? $"public long {split[0]} = {split[1]};"
+                : $"public long {split[0]} => {split[1]};");
         }
 
         public dynamic CompileMonkeys(IEnumerable<string> properties)
@@ -89,15 +79,17 @@ namespace AdventOfCode2022.Solutions
                 sb.AppendLine(property);
             }
 
-            sb.Append(@"public long Property(string name)
-{
-    return (long)GetType().GetProperty(name).GetValue(this);
-}");
+            sb.Append("""
+                      public long Property(string name)
+                      {
+                          return (long)GetType().GetProperty(name).GetValue(this);
+                      }
+                      """);
 
             sb.AppendLine("}");
-            //Console.WriteLine(sb.ToString());
+            
             var compilation = CSharpCompilation.Create(
-                $"Advent.dll",
+                "Advent.dll",
                 new[] { CSharpSyntaxTree.ParseText(sb.ToString()) },
                 new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -107,8 +99,6 @@ namespace AdventOfCode2022.Solutions
             var assembly = Assembly.Load(ms.ToArray());
             var type = assembly.GetType($"Logic");
             return Activator.CreateInstance(type);
-
-
         }
     }
 }
