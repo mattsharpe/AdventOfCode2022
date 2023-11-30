@@ -1,6 +1,6 @@
 # AdventOfCode2022
 
-Solutions to https://adventofcode.com/2022
+Solutions to https://adventofcode.com/2023
 
 ## Advent Of Code .net template
 
